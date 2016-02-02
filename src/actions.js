@@ -1,15 +1,15 @@
-import YTSearch from 'youtube-api-search';
+import SearchYoutube from './lib/youtube.js';
 const API_KEY = 'AIzaSyCUx2lYJCpDU63ODdW5Q2U9_vGs1BJUbsg';
 
 export const SEARCH = 'SEARCH';
 export const SELECT_VIDEO = 'SELECT_VIDEO';
 
-export const searchVideos = (term) => {
+export const searchVideos = (q) => {
   return {
     type: SEARCH,
-    payload: YTSearch({key: API_KEY, term: term}),
+    payload: SearchYoutube({key: API_KEY, q}),
     meta: {
-      searchedFor: term
+      searchedFor: q
     }
   };
 };

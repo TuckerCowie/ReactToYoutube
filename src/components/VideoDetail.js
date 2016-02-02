@@ -2,7 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 const VideoDetail = ({video}) => {
-  if (!video) {
+
+  if (!video) { // Psuedo load screen
     return <div className="col-md-8">No video selected.</div>;
   }
   
@@ -21,10 +22,12 @@ const VideoDetail = ({video}) => {
   );
 }
 
+// Add certain state properties to this.props
 function mapStateToProps(state) {
   return {
     video: state.videos.length > 0 ? state.videos[state.selectedIndex] : null
   }
 }
 
+// When state changes, re-render this component with new state
 export default connect(mapStateToProps)(VideoDetail);

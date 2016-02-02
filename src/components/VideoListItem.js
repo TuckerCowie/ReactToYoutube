@@ -20,4 +20,5 @@ const VideoListItem = ({active, data, id, onVideoClick}) => {
   );
 }
 
+// Simple component doesn't care about state changes so React-Redux#connect is not needed
 export default VideoListItem;

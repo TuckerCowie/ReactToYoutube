@@ -10,14 +10,14 @@ class SearchBar extends React.Component {
       this.state = { 
         searchTerm: ''
       }
-      this.onSubmit = this.onSubmit.bind(this);
-      this.props.searchVideos('React JS');
+      this.onSubmit = this.onSubmit.bind(this); // We have to bind the class's context to this function or `this` will not be scoped correctly
+      this.props.searchVideos('React JS'); // Initial Search when component first loads
     }
 
     onSubmit(event) {
       event.preventDefault();
-      this.props.searchVideos(this.state.searchTerm);
-      this.setState({searchTerm: ''});
+      this.props.searchVideos(this.state.searchTerm); // -> action {type: SEARCH_VIDEOS, ...}
+      this.setState({searchTerm: ''}); // Clear the search term from the input
     }
 
     render() {
@@ -48,8 +48,10 @@ class SearchBar extends React.Component {
 
 }
 
+// Put any relavant action creators onto this.props
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({searchVideos}, dispatch)
 }
 
+// When any of the previously bound action creators are called, re-render this component with new state
 export default connect(null, mapDispatchToProps)(SearchBar);
