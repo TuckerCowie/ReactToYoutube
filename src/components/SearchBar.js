@@ -11,7 +11,7 @@ class SearchBar extends React.Component {
       this.onSubmit = this.onSubmit.bind(this);
 
       // Hacky way to get first results
-      props.dispatch(searchVideosAsync(props.searchTerm));
+      props.dispatch(searchVideos(props.searchTerm));
     }
 
     onChange(event) {
@@ -20,7 +20,7 @@ class SearchBar extends React.Component {
 
     onSubmit(event) {
       event.preventDefault();
-      this.props.dispatch(searchVideosAsync(this.props.searchTerm));
+      this.props.dispatch(searchVideos(this.props.searchTerm));
     }
 
     render() {
