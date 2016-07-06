@@ -1,45 +1,52 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {searchVideos} from '../actions';
+import {connect} from 'react-redux';
+import {searchVideos, searchVideosAsync} from '../actions/videos'
+import {updateSearchTerm} from '../actions/search';
 
 class SearchBar extends React.Component {
-    
     constructor(props) {
       super(props);
-      this.state = { 
-        searchTerm: ''
-      }
-      this.onSubmit = this.onSubmit.bind(this); // We have to bind the class's context to this function or `this` will not be scoped correctly
-      this.props.searchVideos('React JS'); // Initial Search when component first loads
+      this.onChange = this.onChange.bind(this);
+      this.onSubmit = this.onSubmit.bind(this);
+
+      // Hacky way to get first results
+      props.dispatch(searchVideosAsync(props.searchTerm));
+    }
+
+    onChange(event) {
+      this.props.dispatch(updateSearchTerm(event.target.value));
     }
 
     onSubmit(event) {
       event.preventDefault();
-      this.props.searchVideos(this.state.searchTerm); // -> action {type: SEARCH_VIDEOS, ...}
-      this.setState({searchTerm: ''}); // Clear the search term from the input
+      this.props.dispatch(searchVideosAsync(this.props.searchTerm));
     }
 
     render() {
       return (
-        <nav className="navbar navbar-full navbar-light bg-faded" style={{backgroundColor: '#f2dede'}}>
+        <nav className="navbar navbar-full navbar-light bg-faded">
           <div className="container">
-            <a className="navbar-brand" href="#">React to Youtube</a>
+            <a className="navbar-brand" href="#">Re<sup>3</sup> Workshop</a>
             <form onSubmit={this.onSubmit} className="form-inline pull-xs-right">
-              <input 
-                className="form-control"
-                type="text"
-                placeholder="Search"
-                value={this.state.searchTerm}
-                onChange={(event) => this.setState({searchTerm: event.target.value})}
-                autoFocus
-              />
-              <button
-                className="btn btn-danger-outline"
-                type="submit"
-              >
-                Search
-              </button>
+              <div className="input-group">
+                <input 
+                  className="form-control"
+                  type="text"
+                  placeholder="Search"
+                  value={this.props.searchTerm}
+                  onChange={this.onChange}
+                  autoFocus
+                />
+                <span className="input-group-btn">
+                  <button
+                    className="btn btn-primary"
+                    type="submit"
+                  >
+                    Search
+                  </button>
+                </span>
+              </div>
             </form>
           </div>
         </nav>
@@ -48,10 +55,12 @@ class SearchBar extends React.Component {
 
 }
 
-// Put any relavant action creators onto this.props
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({searchVideos}, dispatch)
-}
-
-// When any of the previously bound action creators are called, re-render this component with new state
-export default connect(null, mapDispatchToProps)(SearchBar);
+export default connect(
+  /**
+   * @param {Object} state - an object to be merged with this.props
+   * @returns {Object} That gets merged with this.props
+   */
+  (state) => ({
+    searchTerm: state.search,
+  })
+)(SearchBar);

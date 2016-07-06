@@ -1,59 +1,69 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {selectVideo} from '../actions';
-
 import VideoListItem from './VideoListItem';
 
-// Map functions help render lists of repeated dom elements
-const renderItems = (videos, selectedId, selectVideo) => {
-  if(videos.length > 0) {
-    return videos.map((video, id) => {
+class RenderItems extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selectedId: props.selectedId || 0
+    }
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({selectedId: nextProps.selectedId});
+  }
+
+  handleClick(id) {
+    return (e) => {
+      if (this.props.selectVideo) {
+        this.setState({selectedId: id});
+        this.props.selectVideo(id);
+      }
+    };
+  }
+
+  render() {
+    const {videos} = this.props;
+    if(videos && videos.length > 0) {
       return (
-        <VideoListItem
-          active={id === selectedId}
-          data={video}
-          id={id}
-          key={video.etag}
-          onVideoClick={selectVideo}
-        />
-      );
-    });
-  } else {
-    // If we don't have an iterable, show empty list
-    return (
-      <div className="list-group-item">
-        <div className="media">
-          <div className="media-body">
-            <span className="media-heading">No Videos Found</span>
-          </div>
+        <div>
+          {videos.map((data, id) => (
+          <VideoListItem
+            onClick={this.handleClick(id)}
+            active={id === this.state.selectedId}
+            title={data.snippet.title}
+            key={data.etag}
+            thumbnail={data.snippet.thumbnails.default.url}
+          />))}
         </div>
-      </div>
-    );
+      );
+    } else {
+      return renderNoVideo();
+    }
   }
 }
 
-// Simple Component
-const VideoList = ({videos, selectedId, selectVideo}) => {
+const VideoList = (props) => {
   return (
     <div className="col-md-4 list-group">
-      {renderItems(videos, selectedId, selectVideo)}
+      <RenderItems {...props} />
     </div>
   );
 }
 
-// Put certain state properties on this.props
-function mapStateToProps(state) {
-  return {
-    videos: state.videos,
-    selectedId: state.selectedIndex
-  }
-}
+export default VideoList;
 
-// Also put certain action creators on this.props
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({selectVideo}, dispatch)
+function renderNoVideo() {
+  return (
+    <div className="list-group-item">
+      <div className="media">
+        <div className="media-body">
+          <span className="media-heading">No Videos Found</span>
+        </div>
+      </div>
+    </div>
+  );
 }
-
-// When action is called or state changes, re-render component
-export default connect(mapStateToProps, mapDispatchToProps)(VideoList);

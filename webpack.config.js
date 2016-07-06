@@ -1,5 +1,6 @@
 module.exports = {
   entry: [
+    'babel-polyfill',
     './src/index.js'
   ],
   output: {
@@ -10,7 +11,11 @@ module.exports = {
   module: {
     loaders: [{
       exclude: /node_modules/,
-      loader: 'babel'
+      loader: 'babel',
+      query: {
+          presets: ['es2015', 'react', 'stage-1'],
+          plugins: ['babel-plugin-syntax-async-functions', 'babel-plugin-transform-regenerator']
+      }
     }]
   },
   resolve: {

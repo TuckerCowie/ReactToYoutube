@@ -1,6 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
+import {getSelectedVideo} from '../selectors/video';
+
 const VideoDetail = ({video}) => {
 
   if (!video) { // Psuedo load screen
@@ -25,7 +27,7 @@ const VideoDetail = ({video}) => {
 // Add certain state properties to this.props
 function mapStateToProps(state) {
   return {
-    video: state.videos.length > 0 ? state.videos[state.selectedIndex] : null
+    video: getSelectedVideo(state),
   }
 }
 
