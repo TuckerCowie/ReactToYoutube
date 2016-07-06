@@ -1,8 +1,7 @@
 import React from 'react';
-import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {searchVideos, searchVideosAsync} from '../actions/videos'
-import {updateSearchTerm} from '../actions/search';
 
 class SearchBar extends React.Component {
     constructor(props) {
@@ -10,17 +9,21 @@ class SearchBar extends React.Component {
       this.onChange = this.onChange.bind(this);
       this.onSubmit = this.onSubmit.bind(this);
 
+      this.state = {
+        term: props.searchTerm || 'React JS'
+      };
+
       // Hacky way to get first results
       props.dispatch(searchVideos(props.searchTerm));
     }
 
     onChange(event) {
-      this.props.dispatch(updateSearchTerm(event.target.value));
+      this.setState({term: event.target.value});
     }
 
     onSubmit(event) {
       event.preventDefault();
-      this.props.dispatch(searchVideoc(this.props.searchTerm));
+      this.props.dispatch(searchVideos(this.state.term));
     }
 
     render() {
@@ -34,7 +37,7 @@ class SearchBar extends React.Component {
                   className="form-control"
                   type="text"
                   placeholder="Search"
-                  value={this.props.searchTerm}
+                  value={this.state.term}
                   onChange={this.onChange}
                   autoFocus
                 />
