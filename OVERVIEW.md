@@ -116,12 +116,13 @@ _For validations on large components or long arrays, development mounting/valida
 ### Live code
 
 1. Write a stateless function component to use as the video list item within the app:
+    - Put it in a file called: `./src/components/VideoListItem.js`
     - Should have the following props:
         + active
         + thumbnailUrl
         + title
     - Use the markup from `./markup/VideoListItem.html`
-    - BONUS: No longer than 20 lines long
+    - BONUS: No longer than ~20 lines long
     - If you get stuck, checkout `./src/components/VideoListItem.example.js`
 
 ## Redux
@@ -203,13 +204,11 @@ _Given the same arguments, it should calculate the next state and return it. No 
     - The type property should equal 'UPDATE_SEARCH_TERM'
     - The only argument should be passed into the payload property of the returned action object
     - BONUS: define a constant action type and export it for use in the reducer
+    - If you get stuck, checkout `./src/actions/search.example.js`
 
 1. Write and connect a reducer for the search input form:
     - Put it in a file called `./src/reducers/search.js`
     - It should only return updated state if the action.type matches `UPDATE_SEARCH_TERM`
     - If the action.type does not match, return the original unmodified state
     - BONUS: Set initial state to 'Redux'
-
-## Reselect
-
-## Sagas
+    - If you get stuck, checkout `./src/reducers/search.example.js`
